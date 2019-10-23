@@ -12,12 +12,12 @@ using System.Security.Claims;
 namespace Library.Controllers
 {
   [Authorize]
-  public class BooksController : Controller
+  public class AuthorsController : Controller
   {
     private readonly LibraryContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public BooksController(UserManager<ApplicationUser> userManager, LibraryContext db)
+    public AuthorsController(UserManager<ApplicationUser> userManager, LibraryContext db)
     {
       _userManager = userManager;
       _db = db;
@@ -27,23 +27,23 @@ namespace Library.Controllers
     {
         var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var currentUser = await _userManager.FindByIdAsync(userId);
-        var userBooks = _db.Books.Where(entry => entry.User.Id == currentUser.Id);
-        return View(userBooks);
+        var userAuthors = _db.Authors.Where(entry => entry.User.Id == currentUser.Id);
+        return View(userAuthors);
     }
 
     public ActionResult AddAuthor(int id)
     {
-        var thisBook = _db.Books.FirstOrDefault(books => books.BookId == id);
+        var thisAuthor = _db.Authors.FirstOrDefault(books => books.AuthorId == id);
         ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
-        return View(thisBook);
+        return View(thisAuthor);
     }
 
     [HttpPost]
-    public ActionResult AddAuthor(Book book, int AuthorId)
+    public ActionResult AddAuthor(Author book, int AuthorId)
     {
         if (AuthorId != 0)
         {
-        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, AuthorId = book.AuthorId });
         }
         _db.SaveChanges();
         return RedirectToAction("Index");
@@ -56,15 +56,15 @@ namespace Library.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Book book, int AuthorId)
+    public async Task<ActionResult> Create(Author book, int AuthorId)
     {
         var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var currentUser = await _userManager.FindByIdAsync(userId);
         book.User = currentUser;
-        _db.Books.Add(book);
+        _db.Authors.Add(book);
         if (AuthorId != 0)
         {
-            _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+            _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, AuthorId = book.AuthorId });
         }
         _db.SaveChanges();
         return RedirectToAction("Index");
@@ -72,26 +72,26 @@ namespace Library.Controllers
 
     public ActionResult Details(int id)
     {
-        var thisBook = _db.Books
+        var thisAuthor = _db.Authors
             .Include(book => book.Authors)
             .ThenInclude(join => join.Author)
-            .FirstOrDefault(book => book.BookId == id);
-        return View(thisBook);
+            .FirstOrDefault(book => book.AuthorId == id);
+        return View(thisAuthor);
     }
 
     public ActionResult Edit(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(books => books.BookId == id);
+      var thisAuthor = _db.Authors.FirstOrDefault(books => books.AuthorId == id);
       ViewBag.AuthorId = new SelectList(_db.Authors, "AuthorId", "Name");
-      return View(thisBook);
+      return View(thisAuthor);
     }
 
     [HttpPost]
-    public ActionResult Edit(Book book, int AuthorId)
+    public ActionResult Edit(Author book, int AuthorId)
     {
       if (AuthorId != 0)
       {
-        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, BookId = book.BookId });
+        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, AuthorId = book.AuthorId });
       }
       _db.Entry(book).State = EntityState.Modified;
       _db.SaveChanges();
@@ -100,21 +100,21 @@ namespace Library.Controllers
 
     public ActionResult Delete(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(books => books.BookId == id);
-      return View(thisBook);
+      var thisAuthor = _db.Authors.FirstOrDefault(books => books.AuthorId == id);
+      return View(thisAuthor);
     }
 
     [HttpPost, ActionName("Delete")]
     public ActionResult DeleteConfirmed(int id)
     {
-      var thisBook = _db.Books.FirstOrDefault(books => books.BookId == id);
-      _db.Books.Remove(thisBook);
+      var thisAuthor = _db.Authors.FirstOrDefault(books => books.AuthorId == id);
+      _db.Authors.Remove(thisAuthor);
       _db.SaveChanges();
       return RedirectToAction("Index");
     }
 
     [HttpPost]
-    public ActionResult DeleteAuthor(int joinId)
+    public ActionResult DeleteBook(int joinId)
     {
         var joinEntry = _db.AuthorBook.FirstOrDefault(entry => entry.AuthorBookId == joinId);
         _db.AuthorBook.Remove(joinEntry);

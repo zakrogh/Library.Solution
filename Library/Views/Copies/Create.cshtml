@@ -1,0 +1,26 @@
+@{
+  Layout = "_Layout";
+}
+
+@model Library.Models.Copy
+
+<h4>Add a new copy</h4>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(model => model.Book.Title)
+    @Html.TextBoxFor(model => model.Book.Title)
+
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.CopyId)
+
+        @Html.Label("Select book")
+        @Html.DropDownList("Book.BookId")
+
+        <input type="submit" value="Save" />
+    }
+
+    <input type="submit" value="Add new book" class="btn btn-default" />
+}
+<p>@Html.ActionLink("Show all items", "Index")</p>
