@@ -8,18 +8,11 @@
 
 @using (Html.BeginForm())
 {
-    @Html.LabelFor(model => model.Book.Title)
-    @Html.TextBoxFor(model => model.Book.Title)
 
-    @using (Html.BeginForm())
-    {
-        @Html.HiddenFor(model => model.CopyId)
+    @Html.HiddenFor(model => model.CopyId)
 
-        @Html.Label("Select book")
-        @Html.DropDownList("BookId")
-
-        <input type="submit" value="Save" />
-    }
+    @Html.Label("Select book")
+    @Html.DropDownList("BookId")
 
     <input type="submit" value="Add new book" class="btn btn-default" />
 }

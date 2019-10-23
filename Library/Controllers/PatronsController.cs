@@ -50,7 +50,7 @@ namespace Library.Controllers
     public ActionResult AddCopy(int id)
     {
         var thisPatron = _db.Patrons.FirstOrDefault(patrons => patrons.PatronId == id);
-        ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "Book.Title");
+        ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "CopyId");
         return View(thisPatron);
     }
     [HttpPost]
