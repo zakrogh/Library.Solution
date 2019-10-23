@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 namespace Library.Models
 {
   public class Author
@@ -10,5 +11,6 @@ namespace Library.Models
       public string Name { get; set; }
 
       public ICollection<AuthorBook> Books { get;}
+      public virtual ApplicationUser User { get; set; }
     }
 }

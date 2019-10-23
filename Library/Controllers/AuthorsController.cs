@@ -39,11 +39,11 @@ namespace Library.Controllers
     }
 
     [HttpPost]
-    public ActionResult AddAuthor(Author book, int AuthorId)
+    public ActionResult AddAuthor(Author author, int BookId)
     {
-        if (AuthorId != 0)
+        if (BookId != 0)
         {
-        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, AuthorId = book.AuthorId });
+        _db.AuthorBook.Add(new AuthorBook() { BookId = BookId, AuthorId = author.AuthorId });
         }
         _db.SaveChanges();
         return RedirectToAction("Index");
@@ -56,15 +56,15 @@ namespace Library.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Author book, int AuthorId)
+    public async Task<ActionResult> Create(Author author, int BookId)
     {
         var userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var currentUser = await _userManager.FindByIdAsync(userId);
-        book.User = currentUser;
-        _db.Authors.Add(book);
-        if (AuthorId != 0)
+        author.User = currentUser;
+        _db.Authors.Add(author);
+        if (BookId != 0)
         {
-            _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, AuthorId = book.AuthorId });
+            _db.AuthorBook.Add(new AuthorBook() { BookId = BookId, AuthorId = author.AuthorId });
         }
         _db.SaveChanges();
         return RedirectToAction("Index");
@@ -73,9 +73,9 @@ namespace Library.Controllers
     public ActionResult Details(int id)
     {
         var thisAuthor = _db.Authors
-            .Include(book => book.Authors)
-            .ThenInclude(join => join.Author)
-            .FirstOrDefault(book => book.AuthorId == id);
+            .Include(author => author.Books)
+            .ThenInclude(join => join.Book)
+            .FirstOrDefault(author => author.AuthorId == id);
         return View(thisAuthor);
     }
 
@@ -87,13 +87,13 @@ namespace Library.Controllers
     }
 
     [HttpPost]
-    public ActionResult Edit(Author book, int AuthorId)
+    public ActionResult Edit(Author author, int BookId)
     {
-      if (AuthorId != 0)
+      if (BookId != 0)
       {
-        _db.AuthorBook.Add(new AuthorBook() { AuthorId = AuthorId, AuthorId = book.AuthorId });
+        _db.AuthorBook.Add(new AuthorBook() { BookId = BookId, AuthorId = author.AuthorId });
       }
-      _db.Entry(book).State = EntityState.Modified;
+      _db.Entry(author).State = EntityState.Modified;
       _db.SaveChanges();
       return RedirectToAction("Index");
     }

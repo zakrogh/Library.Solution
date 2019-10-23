@@ -3,24 +3,20 @@
 }
 
 @using Library.Models;
-@model IEnumerable<Library.Models.Copy>
+@model List<Library.Models.Copy>
 
 <h1>Books for @User.Identity.Name</h1>
 
-@if (Model.Any())
+@if (@Model.Count == 0)
 {
-  <ul>
-    @foreach (Book book in Model)
-    {
-      <li>@Html.ActionLink($"{book.Title}", "Details", new { id = book.BookId })</li>
-    }
-  </ul>
-}
-else
-{
-  <h3>No bookss have been added yet!</h3>
+  <h3>No copies have been added yet!</h3>
 }
 
-<p>@Html.ActionLink("Add new book", "Create")</p>
+@foreach (Copy copy in Model)
+{
+  <li>@Html.ActionLink($"{copy.CopyId}", "Details", new { id = copy.CopyId })</li>
+}
+
+<p>@Html.ActionLink("Add new copy", "Create")</p>
 
 <p>@Html.ActionLink("Home", "Index", "Home")</p>
