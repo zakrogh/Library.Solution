@@ -3,6 +3,11 @@ using Library.Models;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Library.Controllers
 {
@@ -42,7 +47,22 @@ namespace Library.Controllers
             .FirstOrDefault(patron => patron.PatronId == id);
         return View(thisPatron);
     }
-
+    public ActionResult AddCopy(int id)
+    {
+        var thisPatron = _db.Patrons.FirstOrDefault(patrons => patrons.PatronId == id);
+        ViewBag.CopyId = new SelectList(_db.Copies, "CopyId", "Book.Title");
+        return View(thisPatron);
+    }
+    [HttpPost]
+    public ActionResult AddCopy(Patron patron, int CopyId)
+    {
+        if (CopyId != 0)
+        {
+        _db.PatronCopy.Add(new PatronCopy() { CopyId = CopyId, PatronId = patron.PatronId });
+        }
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+    }
     public ActionResult Edit(int id)
     {
       var thisPatron = _db.Patrons.FirstOrDefault(patron => patron.PatronId == id);

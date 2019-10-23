@@ -18,7 +18,7 @@ else
   <ul>
   @foreach(var join in Model.Copies)
   {
-    <li>@join.Copy.Book.Title</li>
+    <li>@join.Copy.CopyId</li>
   }
   </ul>
 }
@@ -26,3 +26,4 @@ else
 <p>@Html.ActionLink("Back to patrons", "Index")</p>
 <p>@Html.ActionLink("Edit Patron", "Edit", new { id = Model.PatronId })</p>
 <p>@Html.ActionLink("Delete Patron", "Delete", new { id = Model.PatronId })</p>
+<p>@Html.ActionLink("Add Copy", "AddCopy", new { id = Model.PatronId })</p>

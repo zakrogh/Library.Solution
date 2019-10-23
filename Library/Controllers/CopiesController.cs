@@ -51,7 +51,7 @@ namespace Library.Controllers
 
     public ActionResult Create()
     {
-        ViewBag.PatronId = new SelectList(_db.Patrons, "PatronId", "Name");
+        ViewBag.BookId = new SelectList(_db.Books, "BookId", "Title");
         return View();
     }
 

@@ -3,11 +3,11 @@
 }
 
 @using Library.Models;
-@model List<Library.Models.Author>
+@model IEnumerable<Library.Models.Author>
 
 <h1>Authors for @User.Identity.Name</h1>
 
-@if (Model.Any())
+@if (@Model.Any())
 {
   <ul>
     @foreach (Author author in Model)
