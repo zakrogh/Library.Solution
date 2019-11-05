@@ -6,7 +6,7 @@
 
 ## Description
 
-_This program allows the user to create book, author, book copy, and patron objects which are all stored in a local database. The user can then assign cook copies to patrons_
+_This program allows the user to create book, author, book copy, and patron objects which are all stored in a local database. The user can then assign book copies to patrons to "checkout" books._
 
 ## Setup/Installation Requirements
 * _Install dotnet core._
